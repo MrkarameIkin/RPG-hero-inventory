@@ -9,6 +9,31 @@ void addItem(std::vector<std::string>& inventory)
     inventory.push_back(input);
 }
 
+void sortItems(std::vector<std::string>& inventory)
+{
+    if(inventory.size() == 1) return;
+
+    std::vector<std::string> sortedInventory;
+
+    for(int i = 0; i < (inventory.size() - 1); i++)
+    {
+        sortedInventory.push_back(inventory[i]);
+
+        for(int j = (i + 1); j < (inventory.size() - 1); j++)
+        {
+            if((inventory[i] == inventory[i+j]))
+            {
+                sortedInventory.push_back(inventory[i+j]);
+                inventory.erase(inventory.begin() + i + j);
+                j--;
+            }
+        }
+    }
+
+    sortedInventory.push_back(inventory.back());
+    inventory = sortedInventory;
+}
+
 void outputInventory(std::vector<std::string>& inventory)
 {
     int quantity;
@@ -92,7 +117,7 @@ void clearInventory(std::vector<std::string>& inventory)
     if(input == "Да" or input == "да")
     {
         std::cout << "\nИнвентарь был очищен!\n\n";
-        inventory.resize(0);
+        inventory.clear();
     }
     else if(input == "Нет" or input == "нет") return;
     else std::cout << "Ошибка ввода!\n";
@@ -136,15 +161,15 @@ int main()
         std::cout << "Выберите действие:\n";
         std::cout << "1 - Добавить предмет\n";
         std::cout << "2 - Инвентарь\n";
-        std::cout << "3 - Выход\n";
+        std::cout << "3 - Выход\n\n> ";
 
-        std::cout << "\n> ";
         std::cin >> input;
 
         if(input == '1')
         {
             std::cout << "\nВведите название предмета: ";
             addItem(inventory);
+            sortItems(inventory);
             std::cout << '\n';
         }
         else if(input == '2')
